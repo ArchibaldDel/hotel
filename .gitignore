@@ -1,0 +1,62 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.egg-info/
+*.egg
+*.manifest
+*.spec
+
+# Virtualenv
+.venv/
+venv/
+ENV/
+env/
+.envrc
+.env.local
+.python-version
+
+# Django
+db.sqlite3
+*.log
+*.pot
+*.pyc
+*.mo
+*.db
+media/
+staticfiles/
+
+# Migrations (можно закоммитить, если нужны для prod)
+*/migrations/__pycache__/
+*/migrations/*.pyc
+
+# IDE/Editor
+.vscode/
+.idea/
+*.iml
+
+# pytest / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+.dmypy.json
+.cache/
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+docker-compose.override.yml
+
+# System
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!env.example
