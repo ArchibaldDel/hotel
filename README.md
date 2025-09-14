@@ -38,5 +38,5 @@
 
 ### 1. Клонировать репозиторий
 ```bash
-git clone https://github.com/<your-username>/hotel-api.git
+git clone https://github.com/ArchibaldDel/hotel.git
 cd hotel-api
