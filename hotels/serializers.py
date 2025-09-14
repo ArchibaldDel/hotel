@@ -13,8 +13,7 @@ class RoomSerializer(serializers.ModelSerializer):
 class BookingSerializer(serializers.ModelSerializer):
     room_id = serializers.IntegerField(write_only=True, required=False)
     room = serializers.PrimaryKeyRelatedField(
-        queryset=Room.objects.all(),
-        required=False
+        queryset=Room.objects.all(), required=False
     )
 
     class Meta:
@@ -34,13 +33,17 @@ class BookingSerializer(serializers.ModelSerializer):
         date_start = attrs.get("date_start")
         date_end = attrs.get("date_end")
 
+        # Проверка валидности диапазона дат
         if date_start and date_end and date_end < date_start:
             raise serializers.ValidationError({"date_end": "must be >= date_start"})
 
-        if self.context.get("check_overlap") and room and date_start and date_end:
-            overlap = Booking.objects.filter(room=room).filter(
-                Q(date_start__lte=date_end) & Q(date_end__gte=date_start)
-            ).exists()
+        # Проверка пересечений всегда
+        if room and date_start and date_end:
+            overlap = (
+                Booking.objects.filter(room=room)
+                .filter(Q(date_start__lte=date_end) & Q(date_end__gte=date_start))
+                .exists()
+            )
             if overlap:
                 raise serializers.ValidationError(
                     "Room is not available for the selected dates."

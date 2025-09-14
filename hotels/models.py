@@ -9,11 +9,12 @@ class Room(models.Model):
     def __str__(self):
         return f"Room {self.id}: {self.description[:20]}"
 
+
 class Booking(models.Model):
     room = models.ForeignKey(
         Room,
         on_delete=models.CASCADE,  # если удалим комнату → удалятся все её брони
-        related_name="bookings"
+        related_name="bookings",
     )
     date_start = models.DateField()
     date_end = models.DateField()
@@ -21,4 +22,3 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"Booking {self.id} for Room {self.room_id} ({self.date_start} - {self.date_end})"
-

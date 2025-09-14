@@ -12,10 +12,9 @@ def api_client():
 @pytest.mark.django_db
 def test_create_room(api_client):
     url = reverse("room-create")
-    response = api_client.post(url, {
-        "description": "Test room",
-        "price_per_night": "1234.56"
-    }, format="json")
+    response = api_client.post(
+        url, {"description": "Test room", "price_per_night": "1234.56"}, format="json"
+    )
     assert response.status_code == 201
     assert "id" in response.data
     assert response.data["description"] == "Test room"
@@ -65,11 +64,11 @@ def test_create_booking(api_client):
     room = Room.objects.create(description="With booking", price_per_night=777)
 
     url = reverse("booking-create")
-    response = api_client.post(url, {
-        "room": room.id,
-        "date_start": "2025-09-10",
-        "date_end": "2025-09-15"
-    }, format="json")
+    response = api_client.post(
+        url,
+        {"room": room.id, "date_start": "2025-09-10", "date_end": "2025-09-15"},
+        format="json",
+    )
 
     assert response.status_code == 201
     assert response.data["room"] == room.id
@@ -80,11 +79,11 @@ def test_create_booking_with_room_id(api_client):
     room = Room.objects.create(description="Room with room_id", price_per_night=500)
 
     url = reverse("booking-create")
-    response = api_client.post(url, {
-        "room_id": room.id,
-        "date_start": "2025-09-20",
-        "date_end": "2025-09-22"
-    }, format="json")
+    response = api_client.post(
+        url,
+        {"room_id": room.id, "date_start": "2025-09-20", "date_end": "2025-09-22"},
+        format="json",
+    )
 
     assert response.status_code == 201
     assert response.data["room"] == room.id
@@ -93,11 +92,11 @@ def test_create_booking_with_room_id(api_client):
 @pytest.mark.django_db
 def test_create_booking_with_nonexistent_room(api_client):
     url = reverse("booking-create")
-    response = api_client.post(url, {
-        "room_id": 9999,
-        "date_start": "2025-09-20",
-        "date_end": "2025-09-22"
-    }, format="json")
+    response = api_client.post(
+        url,
+        {"room_id": 9999, "date_start": "2025-09-20", "date_end": "2025-09-22"},
+        format="json",
+    )
 
     assert response.status_code == 400
     assert "room_id" in response.data or "room" in response.data
@@ -119,7 +118,9 @@ def test_list_bookings(api_client):
 @pytest.mark.django_db
 def test_delete_booking(api_client):
     room = Room.objects.create(description="Delete booking", price_per_night=400)
-    booking = Booking.objects.create(room=room, date_start="2025-09-01", date_end="2025-09-05")
+    booking = Booking.objects.create(
+        room=room, date_start="2025-09-01", date_end="2025-09-05"
+    )
 
     url = reverse("booking-delete", kwargs={"pk": booking.id})
     response = api_client.delete(url)
@@ -132,11 +133,11 @@ def test_invalid_booking_dates_format(api_client):
     room = Room.objects.create(description="Invalid booking", price_per_night=900)
 
     url = reverse("booking-create")
-    response = api_client.post(url, {
-        "room": room.id,
-        "date_start": "invalid-date",
-        "date_end": "2025-09-15"
-    }, format="json")
+    response = api_client.post(
+        url,
+        {"room": room.id, "date_start": "invalid-date", "date_end": "2025-09-15"},
+        format="json",
+    )
 
     assert response.status_code == 400
     assert "date_start" in response.data
@@ -147,11 +148,11 @@ def test_invalid_booking_date_range(api_client):
     room = Room.objects.create(description="Range booking", price_per_night=900)
 
     url = reverse("booking-create")
-    response = api_client.post(url, {
-        "room": room.id,
-        "date_start": "2025-09-15",
-        "date_end": "2025-09-10"
-    }, format="json")
+    response = api_client.post(
+        url,
+        {"room": room.id, "date_start": "2025-09-15", "date_end": "2025-09-10"},
+        format="json",
+    )
 
     assert response.status_code == 400
     assert "date_end" in response.data
@@ -163,11 +164,11 @@ def test_booking_overlap(api_client):
     Booking.objects.create(room=room, date_start="2025-09-10", date_end="2025-09-15")
 
     url = reverse("booking-create")
-    response = api_client.post(url, {
-        "room": room.id,
-        "date_start": "2025-09-12",
-        "date_end": "2025-09-20"
-    }, format="json")
+    response = api_client.post(
+        url,
+        {"room": room.id, "date_start": "2025-09-12", "date_end": "2025-09-20"},
+        format="json",
+    )
 
     assert response.status_code == 400
     assert "Room is not available" in str(response.data)
