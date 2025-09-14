@@ -1,0 +1,18 @@
+# Исключаем локальное окружение
+.venv/
+
+# Исключаем всё лишнее
+__pycache__/
+*.pyc
+*.pyo
+*.pdb
+*.egg-info/
+*.egg
+
+# IDE
+.vscode/
+.idea/
+
+# Git
+.git
+.gitignore
